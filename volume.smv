@@ -1,0 +1,51 @@
+MODULE main
+
+VAR
+
+    volume : {low, high}; -- متغیر حالت صدای تلویزیون
+
+    remote : {increase, decrease}; -- متغیر دستور کنترل تلویزیون
+
+
+
+ASSIGN
+
+    init(volume) := low; -- حالت اولیه صدای تلویزیون کم است
+
+    init(remote) := increase; -- دستور اولیه کنترل تلویزیون افزایش صدا است
+
+
+
+    next(volume) :=
+
+        case
+
+            remote = increase & volume = low : high;
+
+            remote = decrease & volume = high : low;
+
+            TRUE : volume;
+
+        esac;
+
+
+
+    next(remote) :=
+
+        case
+
+            volume = high : decrease;
+
+            volume = low : increase;
+
+            TRUE : remote;
+
+        esac;
+
+
+
+-- تعریف ویژگی‌های مطلوب سیستم
+
+SPEC AG (volume = high -> AX (volume = low))
+
+SPEC AG (volume = low -> AX (volume = high))

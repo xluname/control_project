@@ -1,0 +1,41 @@
+MODULE main
+
+VAR
+
+    volume : {on, off}; -- متغیر حالت صدای تلویزیون
+
+    remote : boolean; -- متغیر دستور کنترل تلویزیون (باینری)
+
+
+
+ASSIGN
+
+    init(volume) := off; -- حالت اولیه صدای تلویزیون خاموش است
+
+    init(remote) := FALSE; -- مقدار اولیه کنترل (عدم تغییر)
+
+
+
+    next(volume) :=
+
+        case
+
+            remote = TRUE & volume = on : off;
+
+            remote = TRUE & volume = off : on;
+
+            TRUE : volume;
+
+        esac;
+
+
+
+    next(remote) := !remote; -- تغییر مقدار کنترل در هر مرحله
+
+
+
+-- تعریف ویژگی‌های مطلوب سیستم
+
+SPEC AG (volume = on -> AX (volume = off))
+
+SPEC AG (volume = off -> AX (volume = on))

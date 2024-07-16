@@ -1,0 +1,53 @@
+MODULE main
+
+VAR
+
+  -- کانال فعلی تلویزیون
+
+  current_channel : 0..99;  -- فرض می‌کنیم تلویزیون 100 کانال دارد (0 تا 99)
+
+  
+
+  -- ورودی‌ها برای دکمه‌های ch+ و ch-
+
+  ch_plus : boolean;
+
+  ch_minus : boolean;
+
+
+
+ASSIGN
+
+  -- مقداردهی اولیه کانال
+
+  init(current_channel) := 0;
+
+
+
+  -- تغییر کانال با استفاده از دکمه‌های ch+ و ch-
+
+  next(current_channel) := case
+
+    ch_plus & !ch_minus & current_channel < 99 : current_channel + 1;
+
+    !ch_plus & ch_minus & current_channel > 0 : current_channel - 1;
+
+    ch_plus & ch_minus : current_channel;  -- اگر هر دو دکمه همزمان فشار داده شوند، کانال تغییر نمی‌کند
+
+    TRUE : current_channel;
+
+  esac;
+
+
+
+-- مشخصات و خواص مورد نظر
+
+SPEC
+
+  -- همیشه باید یک کانال معتبر بین 0 و 99 داشته باشیم
+
+  AG (current_channel >= 0 & current_channel <= 99)
+
+  
+
+-- می‌توانید خواص بیشتری براساس نیازهای خود اضافه کنید
